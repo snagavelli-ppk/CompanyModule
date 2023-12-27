@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { FormEvent, useContext, useState } from "react";
 import Checkbox from "@mui/material/Checkbox";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -8,7 +8,6 @@ import { Grid, Button } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
-import { postData } from "../ApiCalls/apiCalls";
 
 import { FormErrors, MyFormData } from "../Types/formTypes";
 import { useFetch } from "./useFetch";
@@ -17,18 +16,15 @@ import { authToken } from "../context/context";
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
-const CompanyAddForm = () => {
-  const initialFormData: MyFormData = {
-    companyName: "",
-    companyUrl: "",
-    tutorials: [],
-    simulations: [],
-    primaryPhoneNumber: "",
-    adminLinkExtension: "",
-    companyadmin: [],
-    companyOptions: "",
-  };
-
+const CompanyForm = ({
+  formData,
+  onHandleInputChange,
+  onHandleSubmit,
+}: {
+  formData: MyFormData;
+  onHandleInputChange: (field: string, value: string) => void;
+  onHandleSubmit: (e: FormEvent) => void;
+}) => {
   const initialFormErrors: FormErrors = {
     companyName: "",
     companyUrl: "",
@@ -40,14 +36,13 @@ const CompanyAddForm = () => {
     companyOptions: "",
   };
 
-  const [formData, setFormData] = useState<MyFormData>(initialFormData);
   const [formErrors, setFormErrors] = useState<FormErrors>(initialFormErrors);
   const [showAlert, setShowAlert] = useState(false);
 
   const { token } = useContext(authToken);
 
   const handleInputChange = (field: keyof MyFormData, value: any) => {
-    setFormData((prevData) => ({ ...prevData, [field]: value }));
+    onHandleInputChange(field, value);
 
     setFormErrors((prevErrors) => {
       let error = "";
@@ -62,7 +57,8 @@ const CompanyAddForm = () => {
   };
   const { simulationsData, tutorialsData, adminData } = useFetch(token);
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: FormEvent) => {
+    onHandleSubmit(e);
     const errors: Partial<FormErrors> = {};
     Object.keys(formData).forEach((key) => {
       const field = key as keyof MyFormData;
@@ -80,27 +76,11 @@ const CompanyAddForm = () => {
       console.log("Form has errors. Cannot submit.");
       return;
     }
-    const updatedFormData = {
-      ...formData,
-      simulations: formData.simulations.map((simulation) => ({
-        id: simulation.id,
-      })),
-    };
-
-    console.log(updatedFormData);
-    const data = await postData(updatedFormData, token);
-    if (data!.status == 200) {
-      handleShowAlert();
-    }
   };
 
   const areAllFieldsFilled = Object.values(formData).every((value) =>
     Array.isArray(value) ? value.length > 0 : value.trim() !== ""
   );
-
-  const handleShowAlert = () => {
-    setShowAlert(true);
-  };
 
   const handleCloseAlert = () => {
     setShowAlert(false);
@@ -331,4 +311,4 @@ const CompanyAddForm = () => {
   );
 };
 
-export default CompanyAddForm;
+export default CompanyForm;

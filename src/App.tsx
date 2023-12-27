@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { authToken } from "./context/context";
 import AuthToken from "./components/authToken";
-import AddEditButtons from "./components/AddEdit";
+import Home from "./components/Home";
 const App = () => {
   const [token, setToken] = useState<string>("");
   const [auth, setAuth] = useState<boolean>(true);
@@ -16,7 +16,7 @@ const App = () => {
       {auth && <AuthToken onSubmit={handleSubmit} />}
       {!auth && (
         <authToken.Provider value={{ token }}>
-          <AddEditButtons/>
+          <Home />
         </authToken.Provider>
       )}
     </>

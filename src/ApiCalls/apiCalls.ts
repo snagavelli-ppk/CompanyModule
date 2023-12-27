@@ -1,6 +1,12 @@
 import axios from "axios";
 import { MyFormData1 } from "../Types/formTypes";
-import { Admin, Simulation, Tutorial } from "../Types/types";
+import {
+  Admin,
+  CompanySubset,
+  Simulation,
+  Tutorial,
+  payLoad,
+} from "../Types/types";
 
 const baseUrl = "https://dev-admin.sunrises.io/api/";
 
@@ -67,6 +73,62 @@ export const getAdmins = async (authToken: string) => {
   }
 };
 
+export const getCompanys = async (authToken: string) => {
+  const url = `https://dev-admin.sunrises.io/api/get-company`;
+
+  try {
+    const response = await axios.post(url, payLoad, {
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (response.status === 200) {
+      const data: any = response.data.data;
+      return data;
+    } else {
+      console.error(
+        "Failed to fetch company details:",
+        response.status,
+        response.statusText
+      );
+      return undefined;
+    }
+  } catch (error: any) {
+    console.error("Error fetching company details:", error.message);
+    return undefined;
+  }
+};
+
+export const getCompanyWithId = async (id: string, authToken: string) => {
+  const url = `https://dev-admin.sunrises.io/api/get-company-with-id?_id=${id}`;
+
+  try {
+    const response = await axios.get(url, {
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (response.status === 200) {
+      const data: any = response.data.data;
+      return data;
+    } else {
+      console.error(
+        "Failed to fetch company details:",
+        response.status,
+        response.statusText
+      );
+      return undefined;
+    }
+  } catch (error: any) {
+    console.error("Error fetching company details:", error.message);
+    return undefined;
+  }
+};
+
 export const postData = async (formData: MyFormData1, authToken: string) => {
   const updatedFormData = {
     ...formData,
@@ -94,39 +156,8 @@ export const postData = async (formData: MyFormData1, authToken: string) => {
   }
 };
 
-export const getCompanyDetails = async (
-  companyId: string,
-  authToken: string
-) => {
-  const url = `get-company-details/${companyId}`;
-
-  try {
-    const response = await axios.get(baseUrl + url, {
-      headers: {
-        Authorization: `Bearer ${authToken}`,
-      },
-    });
-
-    if (response.status === 200) {
-      const data: MyFormData1 | undefined = response.data;
-      return data;
-    } else {
-      console.error(
-        "Failed to fetch company details:",
-        response.status,
-        response.statusText
-      );
-      return undefined;
-    }
-  } catch (error: any) {
-    console.error("Error fetching company details:", error.message);
-    return undefined;
-  }
-};
-
-export const updateCompanyData = async (
-  companyId: string,
-  formData: MyFormData1,
+export const updateData = async (
+  formData: CompanySubset,
   authToken: string
 ) => {
   const updatedFormData = {
@@ -138,29 +169,19 @@ export const updateCompanyData = async (
     ...updatedFormData,
     sso: {},
   };
-
-  const url = `update-company/${companyId}`;
-
-  try {
-    const response = await axios.put(baseUrl + url, updatedFormData1, {
-      headers: {
-        Authorization: `Bearer ${authToken}`,
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (response.status === 200) {
-      return response;
-    } else {
-      console.error(
-        "Failed to update company data:",
-        response.status,
-        response.statusText
-      );
-      return undefined;
-    }
-  } catch (error: any) {
-    console.error("Error updating company data:", error.message);
-    return undefined;
+  console.log(updatedFormData1);
+  const url = "https://dev-admin.sunrises.io/api/edit-company";
+  const response = await fetch(url, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(updatedFormData1),
+  });
+  if (response.ok) {
+    return response;
+  } else {
+    console.error("Failed to post data:", response.status, response.statusText);
   }
 };
