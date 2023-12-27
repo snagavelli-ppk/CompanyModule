@@ -130,7 +130,30 @@ export interface Company {
 export interface CompanySubset {
   adminLinkExtension: string;
   companyName: string;
-  companyOptions: string;
+  companyOptions: '';
+  companyUrl: string;
+  companyadmin: {
+    _id: string;
+    username: string;
+    id: string;
+  }[];
+  primaryPhoneNumber: string;
+  tutorials: {
+    _id: string;
+    tutorname: string;
+    id: string;
+  }[];
+  simulations: {
+    id: string;
+    name: string;
+  }[];
+  _id: string;
+}
+
+export interface CompanySubset1 {
+  adminLinkExtension: string;
+  companyName: string;
+  companyOptions: "";
   companyUrl: string;
   companyadmin: {
     _id: string;

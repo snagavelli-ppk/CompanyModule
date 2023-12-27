@@ -2,7 +2,7 @@ import axios from "axios";
 import { MyFormData1 } from "../Types/formTypes";
 import {
   Admin,
-  CompanySubset,
+  CompanySubset1,
   Simulation,
   Tutorial,
   payLoad,
@@ -157,7 +157,7 @@ export const postData = async (formData: MyFormData1, authToken: string) => {
 };
 
 export const updateData = async (
-  formData: CompanySubset,
+  formData: CompanySubset1,
   authToken: string
 ) => {
   const updatedFormData = {

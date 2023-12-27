@@ -16,14 +16,15 @@ import { authToken } from "../context/context";
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
-const CompanyForm = ({
-  formData,
-  onHandleInputChange,
-  onHandleSubmit,
-}: {
+interface myProps {
   formData: MyFormData;
   onHandleInputChange: (field: string, value: string) => void;
   onHandleSubmit: (e: FormEvent) => void;
+}
+const CompanyForm: React.FC<myProps> = ({
+  formData,
+  onHandleInputChange,
+  onHandleSubmit,
 }) => {
   const initialFormErrors: FormErrors = {
     companyName: "",

@@ -45,6 +45,7 @@ const Home = () => {
         color="primary"
         startIcon={<EditIcon />}
         onClick={handleEditClick}
+        disabled={!selectId}
       >
         Edit
       </Button>

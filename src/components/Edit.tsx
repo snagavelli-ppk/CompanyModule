@@ -49,7 +49,6 @@ const Edit = ({ token, companyId }: { token: string; companyId: string }) => {
         id: simulation.id,
       })),
     };
-
     await updateData(updatedFormData, token);
   };
 
