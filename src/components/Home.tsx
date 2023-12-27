@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
+import CloseIcon from "@mui/icons-material/Close";
 import CompanyTable from "./CompanyTable";
 import { authToken } from "../context/context";
 import Add from "./Add";
@@ -23,6 +24,12 @@ const Home = () => {
     setAddForm(false);
     setTable(false);
     setEditForm(true);
+  };
+  const handleCloseClick = () => {
+    setAddForm(false);
+    setTable(true);
+    setEditForm(false);
+    setSelectId("")
   };
 
   const handleSelect = async (id: string) => {
@@ -49,6 +56,11 @@ const Home = () => {
       >
         Edit
       </Button>
+      <Button
+        variant="contained"
+        startIcon={<CloseIcon />}
+        onClick={handleCloseClick}
+      ></Button>
       {addForm && <Add token={token} />}
       {editForm && <Edit token={token} companyId={selectId} />}
       {table && <CompanyTable onDataSelect={handleSelect} token={token} />}
