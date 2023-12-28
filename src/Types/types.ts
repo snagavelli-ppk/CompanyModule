@@ -130,7 +130,7 @@ export interface Company {
 export interface CompanySubset {
   adminLinkExtension: string;
   companyName: string;
-  companyOptions: '';
+  companyOptions: "";
   companyUrl: string;
   companyadmin: {
     _id: string;

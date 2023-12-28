@@ -76,7 +76,7 @@ export const getAdmins = async (authToken: string) => {
 export const getCompanys = async (authToken: string) => {
   const url = `https://dev-admin.sunrises.io/api/get-company`;
 
-  try {
+
     const response = await axios.post(url, payLoad, {
       headers: {
         Authorization: `Bearer ${authToken}`,
@@ -93,12 +93,8 @@ export const getCompanys = async (authToken: string) => {
         response.status,
         response.statusText
       );
-      return undefined;
     }
-  } catch (error: any) {
-    console.error("Error fetching company details:", error.message);
-    return undefined;
-  }
+  
 };
 
 export const getCompanyWithId = async (id: string, authToken: string) => {

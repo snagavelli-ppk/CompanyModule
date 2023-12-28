@@ -4,12 +4,12 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableContainer,
   TableHead,
   TableRow,
-  Paper,
+  Box,
 } from "@mui/material";
 import { Company } from "../Types/types";
+import tinycolor from "tinycolor2";
 
 const CompanyTable = ({
   onDataSelect,
@@ -19,60 +19,73 @@ const CompanyTable = ({
   token: string;
 }) => {
   const [companyData, setCompanyData] = useState<Company[]>([]);
+  const [selectedRow, setSelectedRow] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchdata = async () => {
+    const fetchData = async () => {
       const data = await getCompanys(token);
       setCompanyData(data);
     };
-    fetchdata();
-  }, []);
+    fetchData();
+  }, [token]);
 
-  const handleRowClick = (data: string) => {
-    onDataSelect(data);
+  const handleRowClick = (companyId: string) => {
+    onDataSelect(companyId);
+    setSelectedRow(companyId);
   };
 
-  const renderTable = () => {
-    return (
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Company Name</TableCell>
-              <TableCell>Company URL</TableCell>
-              <TableCell>Admin Link Extension</TableCell>
-              <TableCell>Number of Trainees</TableCell>
-              <TableCell>Number of Departments</TableCell>
-              <TableCell>Active</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {companyData.map((company, index) => (
+  const getRowStyle = (companyId: string) => {
+    if (selectedRow === companyId) {
+      const brightColor = tinycolor("#2196f3").brighten(15).toString();
+      return {
+        cursor: "pointer",
+        backgroundColor: brightColor,
+      };
+    }
+    return { cursor: "pointer" };
+  };
+
+  return (
+    <Box sx={{ position: "fixed", top: 125}}>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>Company Name</TableCell>
+            <TableCell>Company URL</TableCell>
+            <TableCell>Admin Link Extension</TableCell>
+            <TableCell>Number of Trainees</TableCell>
+            <TableCell>Number of Departments</TableCell>
+            <TableCell>Active</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {companyData.length > 0 ? (
+            companyData.map((company, index) => (
               <TableRow
                 key={index}
                 onClick={() => handleRowClick(company._id)}
                 hover
-                style={{ cursor: "pointer" }}
+                selected={selectedRow === company._id}
+                style={getRowStyle(company._id)}
               >
                 <TableCell>{company.companyName}</TableCell>
                 <TableCell>{company.companyUrl}</TableCell>
                 <TableCell>{company.adminLinkExtension}</TableCell>
                 <TableCell>{company.numberOfTrainees}</TableCell>
                 <TableCell>{company.numberOfDepartments}</TableCell>
-                <TableCell>{company.isActive ? "Yes" : "No"}</TableCell>
+                <TableCell>{company.isActive ? "yes" : "no"}</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    );
-  };
-
-  return (
-    <div>
-      <h2>Company Details</h2>
-      {companyData.length > 0 ? renderTable() : "Loading..."}
-    </div>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={6} align="center">
+                No data available
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+    </Box>
   );
 };
 
