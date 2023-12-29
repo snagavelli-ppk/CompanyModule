@@ -6,10 +6,11 @@ import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import { Grid, Button } from "@mui/material";
 import Typography from "@mui/material/Typography";
-
+import CloseIcon from "@mui/icons-material/Close";
 import { FormErrors, MyFormData } from "../Types/formTypes";
 import { useFetch } from "./useFetch";
 import { authToken } from "../context/context";
+import { useNavigate } from "react-router-dom";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -35,6 +36,7 @@ const CompanyForm: React.FC<myProps> = ({
     companyadmin: "",
     companyOptions: "",
   };
+  const navigate = useNavigate();
 
   const [formErrors, setFormErrors] = useState<FormErrors>(initialFormErrors);
 
@@ -100,22 +102,20 @@ const CompanyForm: React.FC<myProps> = ({
   return (
     <form
       style={{
-        marginTop: '100px',
+        marginTop: "100px",
         width: "80%",
         margin: "auto",
-      
+
         padding: "15px",
         borderRadius: "8px",
         background: "#ffffff",
       }}
-      // style={{
-      //   width: "80%",
-      //   margin: "auto",
-      //   padding: "20px",
-      //   borderRadius: "8px",
-      //   background: "#ffffff",
-      // }}
     >
+      <CloseIcon
+        onClick={() => {
+          navigate("/companies");
+        }}
+      />
       <Typography
         variant="h4"
         sx={{
@@ -126,6 +126,7 @@ const CompanyForm: React.FC<myProps> = ({
       >
         Company Form
       </Typography>
+
       <Grid container spacing={4}>
         <Grid item xs={6}>
           <Typography>Company Name</Typography>

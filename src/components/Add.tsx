@@ -3,7 +3,8 @@ import CompanyForm from "./CompanyForm";
 import { MyFormData } from "../Types/formTypes";
 import { postData } from "../ApiCalls/apiCalls";
 
-const Add = ({ token }: { token: string }) => {
+const Add = () => {
+  const token=''
   const initialFormData: MyFormData = {
     companyName: "",
     companyUrl: "",

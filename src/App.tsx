@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { authToken } from "./context/context";
 import AuthToken from "./components/authToken";
-// import Home from "./components/Home";
-import MiniDrawer from "./components/DashBoard";
+import MiniDrawer from "./components/Layout";
 const App = () => {
   const [token, setToken] = useState<string>("");
   const [auth, setAuth] = useState<boolean>(true);

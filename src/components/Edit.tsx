@@ -1,9 +1,15 @@
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useContext, useEffect, useState } from "react";
 import CompanyForm from "./CompanyForm";
 import { getCompanyWithId, updateData } from "../ApiCalls/apiCalls";
 import { CompanySubset } from "../Types/types";
+import { useParams } from "react-router-dom";
+import { authToken } from "../context/context";
 
-const Edit = ({ token, companyId }: { token: string; companyId: string }) => {
+const Edit = () => {
+  const { token } = useContext(authToken);
+  const { selectId } = useParams();
+  const CId = selectId?.toString() || "";
+  console.log(CId)
   const [formData, setFormData] = useState<CompanySubset>({
     adminLinkExtension: "",
     companyName: "",
@@ -18,7 +24,7 @@ const Edit = ({ token, companyId }: { token: string; companyId: string }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getCompanyWithId(companyId, token);
+      const data = await getCompanyWithId(CId, token);
       const initialState: CompanySubset = {
         adminLinkExtension: data.adminLinkExtension,
         companyName: data.companyName,
@@ -33,7 +39,7 @@ const Edit = ({ token, companyId }: { token: string; companyId: string }) => {
       setFormData(initialState);
     };
     fetchData();
-  }, [companyId]);
+  }, [selectId]);
   const handleInputChange = (field: string, value: string) => {
     setFormData((prevData) => ({
       ...prevData,
